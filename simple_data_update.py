@@ -1,6 +1,4 @@
 import os
-import datetime as dt
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -112,8 +110,6 @@ def process_visits(visits: pd.DataFrame) -> pd.DataFrame:
     if 'visits' in visits.columns:
         visits['visits'] = pd.to_numeric(visits['visits'], errors='coerce').fillna(0)
         visits = visits[visits['visits'] >= 0].copy()
-    else:
-        print("в visits не найден столбец с количеством посещений")
 
     print("---Завершена обработка visits_ab.csv -> visits_processed.csv---\n")
     return visits
@@ -148,7 +144,7 @@ def perform_eda(users_clean: pd.DataFrame, events_clean: pd.DataFrame, plots_pat
     plt.savefig(os.path.join(plots_path, 'device_distribution.png'))
     plt.close()
 
-    # баланс групп a/b: цвет по device (рядом стоящие столбцы)
+    # баланс групп a/b: цвет по device
     plt.figure(figsize=(8, 5))
     order = users_clean['group'].value_counts().index  # сохраняем порядок групп
     sns.countplot(data=users_clean, x='group', hue='device', order=order)

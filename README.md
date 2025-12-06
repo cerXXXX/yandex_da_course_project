@@ -1,4 +1,4 @@
-В /data лежат необработанные файлы:
+В ./data лежат необработанные файлы:
 * events_ab.csv
 * users_ab.csv
 * visits_daily.csv
@@ -6,12 +6,12 @@
 
 simple_data_update.py - обработка данных из /data (создание /data_processed) и создание графиков (/eda_plots)
 
-В /data_processed находятся предобработанные файлы (удалены дубликаты, заполнены пропуски и т.д.)
+В ./data_processed находятся предобработанные файлы (удалены дубликаты, заполнены пропуски и т.д.)
 * events_processed.csv
 * users_processed.csv
 * visits_processed.csv
 
-В /eda_plots лежат графики:
+В ./eda_plots лежат графики:
 1) Распределения возрастов
 2) Пользователи по городам
 3) Пользователи по устройствам
