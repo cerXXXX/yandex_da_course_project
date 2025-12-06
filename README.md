@@ -19,6 +19,8 @@ simple_data_update.py - обработка данных из /data (создан
 5) Количество пользователей из групп A и B
 6) Количество пользователей из групп A и B по типу устройства
 7) Количество пользователей из групп A и B по типу устройства (другой вид)
+8) Распределение пользователей по A/B группам внутри городов
+9) Распределение пользователей по городам внутри A/B групп
 
 Графики
 ![./eda_plots/age_distribution.png](./eda_plots/age_distribution.png "Распределение возраста пользователей")
@@ -28,3 +30,5 @@ simple_data_update.py - обработка данных из /data (создан
 ![./eda_plots/group_balance.png](./eda_plots/group_balance.png "Количество пользователей из групп A и B")
 ![./eda_plots/group_balance_by_device.png](./eda_plots/group_balance_by_device.png "Количество пользователей из групп A и B по типу устройства")
 ![./eda_plots/group_device_stacked.png](./eda_plots/group_device_stacked.png "Количество пользователей из групп A и B по типу устройства (другой вид)")
+![./eda_plots/group_balance_by_city.png](./eda_plots/group_balance_by_city.png "Распределение пользователей по A/B группам внутри городов")
+![./eda_plots/group_city_stacked.png](./eda_plots/group_city_stacked.png "Распределение пользователей по городам внутри A/B групп")
