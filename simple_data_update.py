@@ -165,6 +165,27 @@ def perform_eda(users_clean: pd.DataFrame, events_clean: pd.DataFrame, plots_pat
     plt.savefig(os.path.join(plots_path, 'group_device_stacked.png'))
     plt.close()
 
+    # баланс групп a/b: цвет по городу
+    plt.figure(figsize=(10, 6))
+    order = users_clean['city'].value_counts().index
+    sns.countplot(data=users_clean, y='city', hue='group', order=order)
+    plt.title('баланс групп A/B по городам')
+    plt.legend(title='group', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.tight_layout()
+    plt.savefig(os.path.join(plots_path, 'group_balance_by_city.png'))
+    plt.close()
+
+    pivot = users_clean.groupby(['group', 'city']).size().unstack(fill_value=0)
+    pivot_pct = pivot.div(pivot.sum(axis=1), axis=0)
+
+    ax = pivot_pct.plot(kind='bar', stacked=True, figsize=(10, 6))
+    ax.set_title('доля городов внутри групп (stacked, %)')
+    ax.set_ylabel('доля')
+    ax.legend(title='city', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.tight_layout()
+    plt.savefig(os.path.join(plots_path, 'group_city_stacked.png'))
+    plt.close()
+
     # типы событий
     if 'event_type' in events_clean.columns:
         plt.figure(figsize=(10, 7))
