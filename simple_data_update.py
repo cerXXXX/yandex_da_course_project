@@ -144,6 +144,13 @@ def perform_eda(users_clean: pd.DataFrame, events_clean: pd.DataFrame, plots_pat
     plt.savefig(os.path.join(plots_path, 'device_distribution.png'))
     plt.close()
 
+    # баланс групп a/b
+    plt.figure()
+    sns.countplot(data=users_clean, x='group')
+    plt.title('баланс групп a/b')
+    plt.savefig(os.path.join(plots_path, 'group_balance.png'))
+    plt.close()
+
     # баланс групп a/b: цвет по device
     plt.figure(figsize=(8, 5))
     order = users_clean['group'].value_counts().index  # сохраняем порядок групп
