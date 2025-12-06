@@ -48,8 +48,6 @@ def process_users_advanced(users: pd.DataFrame) -> pd.DataFrame:
     users.loc[users['device'].str.contains('android', na=False), 'device'] = 'android'
     users.loc[~users['device'].isin(['ios', 'android']), 'device'] = 'unknown'
 
-    print('устройства после очистки:', users['device'].unique())
-
     # нормализация city
     users['city'] = users.get('city').fillna('unknown').astype(str).str.strip().str.title()
     city_mapping = {'Нск': 'Новосибирск', 'Мск': 'Москва', 'Спб': 'Санкт-Петербург'}
@@ -59,6 +57,7 @@ def process_users_advanced(users: pd.DataFrame) -> pd.DataFrame:
     small_cities = city_counts[city_counts < 0.01].index
     users.loc[users['city'].isin(small_cities), 'city'] = 'Прочие'
 
+    print("---Завершена обработка users_ab.csv -> users_processed.csv---\n")
     return users
 
 
@@ -81,7 +80,7 @@ def process_events_logic(events: pd.DataFrame, users: pd.DataFrame) -> pd.DataFr
     else:
         print("в events нет колонки 'event_type' — проверь файл")
 
-    # sessionization по разрыву >30 минут
+    # сессии по разрыву >30 минут
     df = df.sort_values(['user_id', 'event_dt'])
     df['prev_time'] = df.groupby('user_id')['event_dt'].shift(1)
     df['time_diff'] = (df['event_dt'] - df['prev_time']).dt.total_seconds() / 60
@@ -94,6 +93,7 @@ def process_events_logic(events: pd.DataFrame, users: pd.DataFrame) -> pd.DataFr
         print(f"найдено {mask_invalid.sum()} аномальных logout-событий — удаляю")
         df = df[~mask_invalid].copy()
 
+    print("---Завершена обработка events_ab.csv -> events_processed.csv---\n")
     return df
 
 
@@ -113,8 +113,9 @@ def process_visits(visits: pd.DataFrame) -> pd.DataFrame:
         visits['visits'] = pd.to_numeric(visits['visits'], errors='coerce').fillna(0)
         visits = visits[visits['visits'] >= 0].copy()
     else:
-        print("в visits не найден столбец с количеством посещений — проверь файл")
+        print("в visits не найден столбец с количеством посещений")
 
+    print("---Завершена обработка visits_ab.csv -> visits_processed.csv---\n")
     return visits
 
 
@@ -157,10 +158,8 @@ def perform_eda(users_clean: pd.DataFrame, events_clean: pd.DataFrame, plots_pat
     plt.savefig(os.path.join(plots_path, 'group_balance_by_device.png'))
     plt.close()
 
-    # альтернатива: stacked bar в процентах по device внутри группы
-    # удобна, если хочется видеть доли устройств внутри каждой группы
     pivot = users_clean.groupby(['group', 'device']).size().unstack(fill_value=0)
-    pivot_pct = pivot.div(pivot.sum(axis=1), axis=0)  # нормируем по строке (по группе)
+    pivot_pct = pivot.div(pivot.sum(axis=1), axis=0)
 
     ax = pivot_pct.plot(kind='bar', stacked=True, figsize=(8, 5))
     ax.set_title('доля устройств внутри групп (stacked, %)')
